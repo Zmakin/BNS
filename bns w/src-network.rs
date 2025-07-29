@@ -1,6 +1,5 @@
 use libp2p::{Swarm, gossipsub::{Gossipsub, GossipsubConfigBuilder}, kad::Kademlia, identity, PeerId};
 use serde::{Serialize, Deserialize};
-use async_std::task;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum BitmapMessage {
@@ -20,7 +19,7 @@ impl Network {
         let local_peer_id = PeerId::from(local_key.public());
         let gossipsub = Gossipsub::new(local_peer_id, GossipsubConfigBuilder::default().build().unwrap()).unwrap();
         let mut swarm = Swarm::new(
-            libp2p::tcp::TokioTcpConfig::new(),
+            libp2p::tcp::GenTcpConfig::new(),
             gossipsub,
             Kademlia::new(local_peer_id, libp2p::kad::store::MemoryStore::new(local_peer_id)),
         );
@@ -37,7 +36,7 @@ impl Network {
     }
 
     pub fn poll(&mut self) {
-        task::block_on(async {
+        tokio::runtime::Runtime::new().unwrap().block_on(async {
             loop {
                 if let Some(event) = self.swarm.next().await {
                     // Handle incoming messages, sync registries
