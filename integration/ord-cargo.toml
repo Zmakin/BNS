@@ -1,0 +1,9 @@
+[dependencies]
+# Existing dependencies
+rusqlite = { version = "0.29", optional = true }
+serde_cbor = { version = "0.11", optional = true }
+reqwest = { version = "0.11", features = ["json"], optional = true }
+libp2p = { version = "0.51", features = ["tcp-tokio", "gossipsub", "kad"], optional = true }
+
+[features]
+bitmap = ["rusqlite", "serde_cbor", "reqwest", "libp2p"]
