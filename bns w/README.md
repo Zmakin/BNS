@@ -5,10 +5,10 @@ This is the setup to run the Bitmap Indexer as a seperate overlay to the ORD cli
 A standalone Rust crate for indexing Bitmap and BNS inscriptions as an overlay for the `ord` client (version 0.22.0). It stores inscriptions in SQLite, minimizes `ord server` API calls, and uses `libp2p` for decentralized synchronization.
 
 ## Prerequisites
-- **Rust**: Install Rust and Cargo (version 1.65 or later) via [rustup](https://rustup.rs/).
-- **Bitcoin Core**: Version 26.0 or later, running on mainnet or testnet with RPC enabled.
+- **Rust**: Install Rust and Cargo (version 1.80 or later) via [rustup](https://rustup.rs/).
+- **Bitcoin Core**: Version 27.1, running on mainnet or testnet with RPC enabled.
 - **ord**: Version 0.22.0, running with `ord server` for API access.
-- **SQLite**: Ensure SQLite is installed (included with `rusqlite` dependency).
+- **SQLite**: Included with `rusqlite` dependency.
 
 ## Setup Instructions
 1. **Clone the Repository**:
@@ -22,7 +22,7 @@ cargo build --release
    ```
 
 Configure Bitcoin Core:
-Ensure Bitcoin Core is running with RPC enabled.
+Ensure Bitcoin Core 27.1 is running with RPC enabled.
 Edit bitcoin.conf (typically in ~/.bitcoin/bitcoin.conf):
    ```conf
 rpcuser=your-username
