@@ -90,9 +90,7 @@ impl BitmapIndexer {
     }
 
     pub async fn run(&mut self) {
-        // Initial sync
         self.sync_blocks(792435, self.rpc.get_block_count().unwrap()).await;
-        // Main loop
         loop {
             let new_height = self.rpc.get_block_count().unwrap();
             if new_height > self.current_block_height {
@@ -105,7 +103,7 @@ impl BitmapIndexer {
     }
 
     async fn sync_blocks(&mut self, start_height: u64, end_height: u64) {
-        for height in (start_height..=end_height).step_by(100) {
+        for height in (start_height..=end_height).step_by(self.config.batch_size) {
             let response = self.http_client
                 .get(format!("http://0.0.0.0:80/inscriptions/block/{}", height))
                 .header("Accept", "application/json")
@@ -326,5 +324,11 @@ impl BitmapIndexer {
         }
 
         Ok(())
+    }
+
+    fn resolve_timestamp_mismatch(&self, inscription_id: &str, local_timestamp: u64) -> u64 {
+        self.network.broadcast_message(&BitmapMessage::TimestampRequest { inscription_id: inscription_id.to_string() });
+        // Collect responses, return majority timestamp
+        local_timestamp // Placeholder
     }
 }
