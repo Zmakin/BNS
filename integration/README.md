@@ -10,7 +10,7 @@ This fork of `ord` (version 0.22.0) adds a `bitmap` subcommand for indexing Bitm
 
 ## Prerequisites
 - **Rust**: Install Rust and Cargo (version 1.65 or later) via [rustup](https://rustup.rs/).
-- **Bitcoin Core**: Version 26.0 or later, running with RPC enabled.
+- **Bitcoin Core**: Version 27.1 or later, running with RPC enabled.
 - **ord**: This fork of `ord` 0.22.0 (ensure you’re using this repository).
 - **SQLite**: Included with `rusqlite` dependency when `bitmap` feature is enabled.
 
@@ -27,7 +27,7 @@ cargo build --release --features bitmap
 This includes rusqlite, serde_cbor, reqwest, and libp2p for the bitmap subcommand.
 
 Configure Bitcoin Core:
-Ensure Bitcoin Core is running with RPC enabled.
+Ensure Bitcoin Core 27.1 is running with RPC enabled.
 Edit bitcoin.conf (typically in ~/.bitcoin/bitcoin.conf):
    ```conf
 rpcuser=your-username
