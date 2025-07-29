@@ -71,7 +71,8 @@ The indexer will sync from block 792,435, process new blocks, and broadcast upda
 Verify Operation:Check SQLite databases in ~/.ord/bitmap_mainnet.db or ~/.ord/bitmap_testnet.db.
 Monitor logs for inscription processing and libp2p events.
 
-NotesEnsure ord server is running on http://0.0.0.0:80.
+Notes
+Ensure ord server is running on http://0.0.0.0:80.
 For testnet, set chain = "testnet" in config.toml.
 The indexer stores Bitmap and BNS data indefinitely, with BNS transfer data cached for 144 blocks.
 
