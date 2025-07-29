@@ -4,18 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ordinals = "0.22"
-bitcoin = "0.30"
-rusqlite = "0.29"
-serde = { version = "1.0", features = ["derive"] }
-serde_cbor = "0.11"
-serde_json = "1.0"
-reqwest = { version = "0.11", features = ["json"] }
-libp2p = { version = "0.51", features = ["tcp-tokio", "gossipsub", "kad"] }
-config = "0.13"
-log = "0.4"
-env_logger = "0.10"
-rayon = "1.8"
-num_cpus = "1.16"
-tokio = { version = "1.0", features = ["full"] }
-async-std = "1.12"
+ordinals = "0.22.0"
+bitcoin = "0.32.3"
+rusqlite = "0.32.1"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_cbor = "0.12.0"
+serde_json = "1.0.128"
+reqwest = { version = "0.12.7", features = ["json"] }
+libp2p = { version = "0.53.2", features = ["tcp", "tokio", "gossipsub", "kad"] }
+config = "0.14.0"
+log = "0.4.22"
+env_logger = "0.11.5"
+rayon = "1.10.0"
+num_cpus = "1.16.0"
+tokio = { version = "1.40.0", features = ["full"] }
