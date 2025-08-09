@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ordinals = "0.22.0"
+ordinals = "0.0.15"
 bitcoin = "0.32.3"
 rusqlite = "0.32.1"
 serde = { version = "1.0.210", features = ["derive"] }
