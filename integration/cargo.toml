@@ -8,7 +8,7 @@ log = "0.4.22"
 # ... other existing ord dependencies (e.g., clap, redb)
 # Added for bitmap subcommand
 rusqlite = { version = "0.32.1", optional = true }
-serde_cbor = { version = "0.12.0", optional = true }
+serde_cbor = { version = "0.11.2", optional = true }
 reqwest = { version = "0.12.7", features = ["json"], optional = true }
 libp2p = { version = "0.53.2", features = ["tcp", "tokio", "gossipsub", "kad"], optional = true }
 
