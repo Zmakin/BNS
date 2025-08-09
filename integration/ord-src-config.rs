@@ -21,3 +21,44 @@ pub struct BitmapConfig {
     pub bns_history_mode: Option<String>,
     pub bootstrap_nodes: Option<Vec<String>>,
 }
+
+// Minimal migration helpers for integration index tables
+pub mod bitmap_integration_migrations {
+    use rusqlite::Connection;
+
+    pub fn create_bitmap_index_table(conn: &Connection) {
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS bitmap_index (
+                blockheight TEXT PRIMARY KEY,
+                timestamp INTEGER NOT NULL,
+                inscription_id TEXT NOT NULL,
+                satpoint TEXT NOT NULL,
+                current_owner TEXT NOT NULL,
+                transfer_block INTEGER NOT NULL
+            )",
+            [],
+        )
+        .unwrap();
+    }
+
+    pub fn create_bns_index_table(conn: &Connection) {
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS bns_index (
+                name TEXT PRIMARY KEY,
+                address TEXT NOT NULL,
+                owner TEXT NOT NULL,
+                inscription_block INTEGER NOT NULL,
+                tx_index INTEGER NOT NULL,
+                inscription_id TEXT NOT NULL,
+                sat_number INTEGER NOT NULL,
+                transfer_status INTEGER NOT NULL,
+                transfer_block INTEGER NOT NULL,
+                timestamp INTEGER NOT NULL,
+                is_default_name INTEGER NOT NULL,
+                original_blockheight TEXT NOT NULL
+            )",
+            [],
+        )
+        .unwrap();
+    }
+}

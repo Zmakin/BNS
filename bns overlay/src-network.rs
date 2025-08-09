@@ -15,6 +15,7 @@ pub struct Network {
 }
 
 impl Network {
+    const BITMAP_TOPIC: &'static str = "bitmap";
     pub fn new(local_key: identity::Keypair, bootstrap_nodes: Vec<String>, network: &str) -> Self {
         let local_peer_id = PeerId::from(local_key.public());
         let gossipsub = Gossipsub::new(local_peer_id, GossipsubConfigBuilder::default().build().unwrap()).unwrap();
@@ -23,7 +24,12 @@ impl Network {
             gossipsub,
             Kademlia::new(local_peer_id, libp2p::kad::store::MemoryStore::new(local_peer_id)),
         );
-        swarm.behaviour_mut().gossipsub.subscribe(&format!("bitmap-inscriptions-{}", network).into_bytes()).unwrap();
+        // Subscribe to a single unified topic for all bitmap and BNS traffic
+        swarm
+            .behaviour_mut()
+            .gossipsub
+            .subscribe(&Self::BITMAP_TOPIC.as_bytes().to_vec())
+            .unwrap();
         for node in bootstrap_nodes {
             swarm.dial(node.parse().unwrap()).unwrap();
         }
@@ -32,7 +38,13 @@ impl Network {
 
     pub fn broadcast_message(&mut self, message: &BitmapMessage) {
         let message_bytes = serde_cbor::to_vec(message).unwrap();
-        self.swarm.behaviour_mut().gossipsub.publish(format!("bitmap-inscriptions").into_bytes(), message_bytes).unwrap();
+        // Publish to the single unified topic
+        self
+            .swarm
+            .behaviour_mut()
+            .gossipsub
+            .publish(Self::BITMAP_TOPIC.as_bytes().to_vec(), message_bytes)
+            .unwrap();
     }
 
     pub fn poll(&mut self) {
@@ -43,5 +55,30 @@ impl Network {
                 }
             }
         });
+    }
+
+    // Explicit helper wrappers so callers can invoke clear domain-specific commands
+    // All messages are still sent on the single "bitmap" topic.
+    pub fn send_bitmap_register(&mut self, entry: &super::database::BitmapEntry) {
+        self.broadcast_message(&BitmapMessage::BitmapRegistration { entry: entry.clone() });
+    }
+
+    pub fn send_bitmap_transfer(
+        &mut self,
+        blockheight: &str,
+        new_owner: &str,
+        transfer_block: u64,
+    ) {
+        self.broadcast_message(&BitmapMessage::BitmapTransfer {
+            blockheight: blockheight.to_string(),
+            new_owner: new_owner.to_string(),
+            transfer_block,
+        });
+    }
+
+    // BNS subtopic via command naming convention: bitmap_bns_<command>
+    // This wrapper corresponds to: bitmap_bns_claim
+    pub fn send_bitmap_bns_claim(&mut self, entry: &super::database::BnsEntry) {
+        self.broadcast_message(&BitmapMessage::BnsInscription { entry: entry.clone() });
     }
 }
